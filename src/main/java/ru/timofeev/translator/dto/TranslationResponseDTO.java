@@ -13,7 +13,5 @@ import java.util.List;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TranslationResponseDTO {
-
     List<Translation> translations;
-
 }
