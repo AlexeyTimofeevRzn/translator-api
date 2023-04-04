@@ -29,7 +29,7 @@ public class YandexTranslationService {
         List<String> list = List.of(TextSpliterator.getSplittedText(text));
 
         jsonRequest.put("folderId", yandexConfig.getFolderId());
-        jsonRequest.put("text", "[" + list + "]");
+        jsonRequest.put("text", list.toString());
         jsonRequest.put("targetLanguageCode", "en");
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonRequest, getHeaders());
