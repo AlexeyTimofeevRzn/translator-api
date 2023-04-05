@@ -6,7 +6,7 @@ public class TextSpliterator {
 
     }
 
-    public static String[] getSplittedText(String text) {
+    public static String[] getSplitTextBySpaces(String text) {
         return text.split(" ");
     }
 

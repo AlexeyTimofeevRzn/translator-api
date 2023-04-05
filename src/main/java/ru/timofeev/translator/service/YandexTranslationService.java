@@ -26,7 +26,7 @@ public class YandexTranslationService {
     private void getResponse(String text) {
         Map<String, String> jsonRequest = new HashMap<>();
 
-        List<String> list = List.of(TextSpliterator.getSplittedText(text));
+        List<String> list = List.of(TextSpliterator.getSplitTextBySpaces(text));
 
         jsonRequest.put("folderId", yandexConfig.getFolderId());
         jsonRequest.put("text", list.toString());

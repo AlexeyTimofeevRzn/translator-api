@@ -2,6 +2,7 @@ package ru.timofeev.translator.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationRequestDTO;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 
@@ -19,9 +20,9 @@ public class TranslatorController {
     }
 
     @GetMapping("/allTranslates")
-    public ResponseEntity<TranslationResponseDTO> getPreviousTranslations() {
+    public ResponseEntity<List<TranslationResult>> getPreviousTranslations() {
 
-        return ResponseEntity.ok(new TranslationResponseDTO());
+        return ResponseEntity.ok(List.of(new TranslationResult()));
     }
 
 }
