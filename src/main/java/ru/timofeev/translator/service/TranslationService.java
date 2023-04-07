@@ -3,34 +3,52 @@ package ru.timofeev.translator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Text;
+import ru.timofeev.translator.dao.TranslationResultDAO;
 import ru.timofeev.translator.data.Translation;
-import ru.timofeev.translator.dto.TranslationRequestDTO;
+import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
-import ru.timofeev.translator.utils.TextSpliterator;
 
-import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class TranslationService {
 
-    YandexTranslationService yandexTranslationService;
+    private final TranslationResultDAO translationResultDAO;
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public TranslationService(JdbcTemplate jdbcTemplate, YandexTranslationService yandexTranslationService) {
+    public TranslationService(TranslationResultDAO translationResultDAO, JdbcTemplate jdbcTemplate) {
+        this.translationResultDAO = translationResultDAO;
         this.jdbcTemplate = jdbcTemplate;
-        this.yandexTranslationService = yandexTranslationService;
     }
 
-    public TranslationResponseDTO translate(TranslationRequestDTO translationRequestDTO) {
-        return yandexTranslationService.getTranslation(translationRequestDTO);
+    public void save
+            (List<String> requests, TranslationResponseDTO translationResponseDTO, Date date, String ipAddress, String targetLanguageCode) {
+
+        List<Translation> translations = translationResponseDTO.getTranslations();
+
+        for (int i = 0; i < requests.size(); i++) {
+
+            String params = translations.get(i).getDetectedLanguageCode() + "-" + targetLanguageCode;
+
+            TranslationResult translationResult = TranslationResult.builder()
+                    .inputText(requests.get(i))
+                    .result(translations.get(i).getText())
+                    .date(date)
+                    .ipAddress(ipAddress)
+                    .params(params)
+                    .build();
+
+            translationResultDAO.save(translationResult);
+        }
+
     }
 
-    public void save(TranslationResponseDTO translationResponseDTO, String ipAddress) {
-
+    public List<TranslationResult> getAllTranslates() {
+        return translationResultDAO.getAllTranslations();
     }
 
 }

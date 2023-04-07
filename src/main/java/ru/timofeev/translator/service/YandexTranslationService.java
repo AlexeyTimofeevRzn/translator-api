@@ -4,12 +4,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Text;
 import ru.timofeev.translator.config.YandexConfig;
 
 import org.springframework.http.HttpHeaders;
 import ru.timofeev.translator.data.Translation;
-import ru.timofeev.translator.dto.TranslationRequestDTO;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 import ru.timofeev.translator.utils.TextSpliterator;
 
@@ -27,16 +25,14 @@ public class YandexTranslationService {
         this.yandexConfig = yandexConfig;
     }
 
-    public TranslationResponseDTO getTranslation(TranslationRequestDTO translationRequestDTO) {
+    public TranslationResponseDTO getTranslations(List<String> texts, String targetLanguageCode) {
         TranslationResponseDTO responseDTO = new TranslationResponseDTO();
-
-        List<String> texts = TextSpliterator.getSplitTextBySpaces(translationRequestDTO.getText());
 
         List<Translation> translations = new ArrayList<>();
 
         for (String text: texts) {
             translations
-                    .add(this.getTranslationForSingleWord(text, translationRequestDTO.getTargetLanguageCode()));
+                    .add(this.getTranslationForSingleWord(text, targetLanguageCode));
         }
 
         responseDTO.setTranslations(translations);

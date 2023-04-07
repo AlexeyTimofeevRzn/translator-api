@@ -6,6 +6,6 @@ create table translation_result
     input_text varchar(255),
     result     varchar(255),
     params     varchar(255),
-    id_address varchar(255),
+    ip_address varchar(255),
     request_data timestamp
 );

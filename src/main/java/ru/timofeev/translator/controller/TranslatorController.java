@@ -8,7 +8,10 @@ import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationRequestDTO;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 import ru.timofeev.translator.service.TranslationService;
+import ru.timofeev.translator.service.YandexTranslationService;
+import ru.timofeev.translator.utils.TextSpliterator;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -17,16 +20,28 @@ public class TranslatorController {
 
     private final TranslationService translationService;
 
+    private final YandexTranslationService yandexTranslationService;
+
     @Autowired
-    public TranslatorController(TranslationService translationService) {
+    public TranslatorController(TranslationService translationService, YandexTranslationService yandexTranslationService) {
         this.translationService = translationService;
+        this.yandexTranslationService = yandexTranslationService;
     }
 
     @PostMapping("/translate")
     public ResponseEntity<TranslationResponseDTO> translateText
             (@RequestBody TranslationRequestDTO requestDTO, HttpServletRequest request) {
 
-        TranslationResponseDTO result = translationService.translate(requestDTO);
+        List<String> texts = TextSpliterator.getSplitTextBySpaces(requestDTO.getText());
+
+        String ipAddress = request.getRemoteAddr();
+        Date date = new Date(System.currentTimeMillis());
+        String targetLanguageCode = requestDTO.getTargetLanguageCode();
+
+        TranslationResponseDTO result = yandexTranslationService
+                .getTranslations(texts, requestDTO.getTargetLanguageCode());
+
+        translationService.save(texts, result, date, ipAddress, targetLanguageCode);
 
         return ResponseEntity.ok(result);
     }
@@ -34,7 +49,9 @@ public class TranslatorController {
     @GetMapping("/allTranslates")
     public ResponseEntity<List<TranslationResult>> getPreviousTranslations() {
 
-        return ResponseEntity.ok(List.of(new TranslationResult()));
+        List<TranslationResult> translationResults = translationService.getAllTranslates();
+
+        return ResponseEntity.ok(translationResults);
     }
 
 }
