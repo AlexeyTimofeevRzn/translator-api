@@ -27,10 +27,9 @@ public class YandexTranslationService {
 
     public TranslationResponseDTO getTranslations(List<String> texts, String targetLanguageCode) {
         TranslationResponseDTO responseDTO = new TranslationResponseDTO();
-
         List<Translation> translations = new ArrayList<>();
 
-        for (String text: texts) {
+        for (String text : texts) {
             translations
                     .add(this.getTranslationForSingleWord(text, targetLanguageCode));
         }
@@ -38,6 +37,7 @@ public class YandexTranslationService {
         responseDTO.setTranslations(translations);
 
         return responseDTO;
+
     }
 
     private Translation getTranslationForSingleWord(String text, String targetLanguageCode) {

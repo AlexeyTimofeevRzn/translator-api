@@ -10,6 +10,7 @@ import ru.timofeev.translator.dto.TranslationResponseDTO;
 import ru.timofeev.translator.service.TranslationService;
 import ru.timofeev.translator.service.YandexTranslationService;
 import ru.timofeev.translator.utils.TextSpliterator;
+import ru.timofeev.translator.utils.validator.InputTextValidator;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,8 @@ public class TranslatorController {
     @PostMapping("/translate")
     public ResponseEntity<TranslationResponseDTO> translateText
             (@RequestBody TranslationRequestDTO requestDTO, HttpServletRequest request) {
+
+        InputTextValidator.validateInputText(requestDTO.getText());
 
         List<String> texts = TextSpliterator.getSplitTextBySpaces(requestDTO.getText());
 
