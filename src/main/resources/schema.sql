@@ -9,6 +9,3 @@ create table translation_result
     id_address varchar(255),
     request_data timestamp
 );
-
-insert into translation_result(input_text, result, params, id_address)
-values ( 'apple', 'яблоко', 'en-ru', 'jeqweq')

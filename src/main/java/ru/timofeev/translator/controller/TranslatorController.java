@@ -1,10 +1,13 @@
 package ru.timofeev.translator.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationRequestDTO;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
+import ru.timofeev.translator.service.TranslationService;
 
 import java.util.List;
 
@@ -12,11 +15,20 @@ import java.util.List;
 @RequestMapping("/translator")
 public class TranslatorController {
 
+    private final TranslationService translationService;
+
+    @Autowired
+    public TranslatorController(TranslationService translationService) {
+        this.translationService = translationService;
+    }
+
     @PostMapping("/translate")
-    public ResponseEntity<TranslationResponseDTO> translateText(@RequestBody TranslationRequestDTO requestDTO) {
+    public ResponseEntity<TranslationResponseDTO> translateText
+            (@RequestBody TranslationRequestDTO requestDTO, HttpServletRequest request) {
 
+        TranslationResponseDTO result = translationService.translate(requestDTO);
 
-        return ResponseEntity.ok(new TranslationResponseDTO());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/allTranslates")

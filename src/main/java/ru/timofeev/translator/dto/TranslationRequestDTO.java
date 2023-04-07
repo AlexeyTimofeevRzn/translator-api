@@ -15,8 +15,6 @@ public class TranslationRequestDTO {
 
     String targetLanguageCode;
 
-    List<String> texts;
-
-    String folderId;
+    String text;
 
 }

@@ -4,12 +4,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Text;
 import ru.timofeev.translator.config.YandexConfig;
 
 import org.springframework.http.HttpHeaders;
+import ru.timofeev.translator.data.Translation;
+import ru.timofeev.translator.dto.TranslationRequestDTO;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 import ru.timofeev.translator.utils.TextSpliterator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +27,31 @@ public class YandexTranslationService {
         this.yandexConfig = yandexConfig;
     }
 
-    private void getResponse(String text) {
+    public TranslationResponseDTO getTranslation(TranslationRequestDTO translationRequestDTO) {
+        TranslationResponseDTO responseDTO = new TranslationResponseDTO();
+
+        List<String> texts = TextSpliterator.getSplitTextBySpaces(translationRequestDTO.getText());
+
+        List<Translation> translations = new ArrayList<>();
+
+        for (String text: texts) {
+            translations
+                    .add(this.getTranslationForSingleWord(text, translationRequestDTO.getTargetLanguageCode()));
+        }
+
+        responseDTO.setTranslations(translations);
+
+        return responseDTO;
+    }
+
+    private Translation getTranslationForSingleWord(String text, String targetLanguageCode) {
         Map<String, String> jsonRequest = new HashMap<>();
 
-        List<String> list = List.of(TextSpliterator.getSplitTextBySpaces(text));
+        List<String> words = TextSpliterator.getSplitTextBySpaces(text);
 
         jsonRequest.put("folderId", yandexConfig.getFolderId());
-        jsonRequest.put("text", list.toString());
-        jsonRequest.put("targetLanguageCode", "en");
+        jsonRequest.put("texts", "[" + text + "]");
+        jsonRequest.put("targetLanguageCode", targetLanguageCode);
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonRequest, getHeaders());
 
@@ -38,16 +59,16 @@ public class YandexTranslationService {
 
         TranslationResponseDTO translations = restTemplate
                 .postForObject(yandexConfig.getURL(), request, TranslationResponseDTO.class);
+
+        return translations.getTranslations().get(0);
     }
 
     private HttpHeaders getHeaders() {
 
         HttpHeaders httpHeaders = new HttpHeaders();
 
-        String url = "https://translate.api.cloud.yandex.net/translate/v2/translate";
-
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.add("Authorization", "Bearer " + this.yandexConfig.getToken());
+        httpHeaders.add("Authorization", "Bearer " + yandexConfig.getToken());
 
         return httpHeaders;
     }
