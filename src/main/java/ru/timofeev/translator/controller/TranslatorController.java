@@ -11,7 +11,7 @@ import ru.timofeev.translator.service.TranslationService;
 import ru.timofeev.translator.service.YandexTranslationService;
 import ru.timofeev.translator.utils.TextSpliterator;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @RestController

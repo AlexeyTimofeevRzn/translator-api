@@ -8,7 +8,7 @@ import ru.timofeev.translator.data.Translation;
 import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,12 +17,9 @@ public class TranslationService {
 
     private final TranslationResultDAO translationResultDAO;
 
-    private final JdbcTemplate jdbcTemplate;
-
     @Autowired
-    public TranslationService(TranslationResultDAO translationResultDAO, JdbcTemplate jdbcTemplate) {
+    public TranslationService(TranslationResultDAO translationResultDAO) {
         this.translationResultDAO = translationResultDAO;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void save
