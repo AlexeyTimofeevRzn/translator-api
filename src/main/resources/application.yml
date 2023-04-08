@@ -2,9 +2,12 @@ yandex:
   token:
   folderId:
 
-
-
 spring:
-  jdbc:
-    driver:
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      enabled: true
 
+server:
+  port: 8080
