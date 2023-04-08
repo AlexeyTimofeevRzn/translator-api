@@ -35,7 +35,7 @@ public class TranslatorController {
 
         InputTextValidator.validateInputText(requestDTO.getText());
 
-        List<String> texts = TextSpliterator.getSplitTextBySpaces(requestDTO.getText());
+        List<String> texts = TextSpliterator.getSplitTextBySpacesAndCommas(requestDTO.getText());
 
         String ipAddress = request.getRemoteAddr();
         Date date = new Date(System.currentTimeMillis());

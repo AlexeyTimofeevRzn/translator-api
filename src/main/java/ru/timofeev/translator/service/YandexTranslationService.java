@@ -43,10 +43,10 @@ public class YandexTranslationService {
     private Translation getTranslationForSingleWord(String text, String targetLanguageCode) {
         Map<String, String> jsonRequest = new HashMap<>();
 
-        List<String> words = TextSpliterator.getSplitTextBySpaces(text);
+        List<String> words = TextSpliterator.getSplitTextBySpacesAndCommas(text);
 
         jsonRequest.put("folderId", yandexConfig.getFolderId());
-        jsonRequest.put("texts", "[" + text + "]");
+        jsonRequest.put("texts", text);
         jsonRequest.put("targetLanguageCode", targetLanguageCode);
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(jsonRequest, getHeaders());

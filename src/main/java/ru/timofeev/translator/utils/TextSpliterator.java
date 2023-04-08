@@ -8,7 +8,8 @@ public class TextSpliterator {
 
     }
 
-    public static List<String> getSplitTextBySpaces(String text) {
+    public static List<String> getSplitTextBySpacesAndCommas(String text) {
+        text = InputTextProcessor.getProcessedText(text);
         return List.of(text.split(" "));
     }
 

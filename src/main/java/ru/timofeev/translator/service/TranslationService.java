@@ -8,6 +8,7 @@ import ru.timofeev.translator.data.Translation;
 import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
