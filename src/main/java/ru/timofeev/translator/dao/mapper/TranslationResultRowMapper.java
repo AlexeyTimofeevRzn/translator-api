@@ -1,5 +1,6 @@
 package ru.timofeev.translator.dao.mapper;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import org.springframework.jdbc.core.RowMapper;
 import ru.timofeev.translator.data.TranslationResult;
 
@@ -7,12 +8,14 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TranslationResultRowMapper implements RowMapper<TranslationResult> {
     @Override
     public TranslationResult mapRow(ResultSet rs, int rowNum) throws SQLException {
         Timestamp timestamp = rs.getTimestamp("request_data");
-        Date date = new Date(timestamp.getTime());
+        LocalDateTime date = timestamp.toLocalDateTime();
 
         TranslationResult result
                 = TranslationResult.builder()

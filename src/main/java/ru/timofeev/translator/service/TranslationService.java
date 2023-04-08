@@ -8,7 +8,9 @@ import ru.timofeev.translator.data.Translation;
 import ru.timofeev.translator.data.TranslationResult;
 import ru.timofeev.translator.dto.TranslationResponseDTO;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class TranslationService {
     }
 
     public void save
-            (List<String> requests, TranslationResponseDTO translationResponseDTO, Date date, String ipAddress, String targetLanguageCode) {
+            (List<String> requests, TranslationResponseDTO translationResponseDTO, LocalDateTime ldt, String ipAddress, String targetLanguageCode) {
 
         List<Translation> translations = translationResponseDTO.getTranslations();
 
@@ -35,7 +37,7 @@ public class TranslationService {
             TranslationResult translationResult = TranslationResult.builder()
                     .inputText(requests.get(i))
                     .result(translations.get(i).getText())
-                    .date(date)
+                    .date(ldt)
                     .ipAddress(ipAddress)
                     .params(params)
                     .build();

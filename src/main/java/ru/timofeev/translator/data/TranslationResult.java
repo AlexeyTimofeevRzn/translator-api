@@ -24,6 +24,6 @@ public class TranslationResult {
 
     String ipAddress;
 
-    Date date;
+    LocalDateTime date;
 
 }

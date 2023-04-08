@@ -12,6 +12,9 @@ import ru.timofeev.translator.service.YandexTranslationService;
 import ru.timofeev.translator.utils.TextSpliterator;
 import ru.timofeev.translator.utils.validator.InputTextValidator;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -38,15 +41,15 @@ public class TranslatorController {
         List<String> texts = TextSpliterator.getSplitTextBySpacesAndCommas(requestDTO.getText());
 
         String ipAddress = request.getRemoteAddr();
-        Date date = new Date(System.currentTimeMillis());
+        LocalDateTime ldt = LocalDateTime.now();
         String targetLanguageCode = requestDTO.getTargetLanguageCode();
 
-        TranslationResponseDTO result = yandexTranslationService
+        TranslationResponseDTO translations = yandexTranslationService
                 .getTranslations(texts, requestDTO.getTargetLanguageCode());
 
-        translationService.save(texts, result, date, ipAddress, targetLanguageCode);
+        translationService.save(texts, translations, ldt, ipAddress, targetLanguageCode);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(translations);
     }
 
     @GetMapping("/allTranslates")
